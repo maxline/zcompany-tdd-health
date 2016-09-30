@@ -26,28 +26,27 @@ import static com.zcompany.health.EActivity.*;
  */
 public class HealthMe {
 
-
-    private static final int INITIAL_CAPACITY = 7;
+    private static final int DAYS_NUMBER = 7;
+    protected static final int ACTIVITIES_NUMBER = 3;
 
     private int liquidPlan;
     private int foodPlan;
     private int stepsPlan;
 
-
     private Map<Integer, Integer> liquidFact = new HashMap<Integer, Integer>() {{
-        for (int i = 1; i < INITIAL_CAPACITY; i++) {
+        for (int i = 1; i < DAYS_NUMBER; i++) {
             put(i, 0);
         }
     }};
 
     private Map<Integer, Integer> foodFact = new HashMap<Integer, Integer>() {{
-        for (int i = 1; i < INITIAL_CAPACITY; i++) {
+        for (int i = 1; i < DAYS_NUMBER; i++) {
             put(i, 0);
         }
     }};
 
     private Map<Integer, Integer> stepsFact = new HashMap<Integer, Integer>() {{
-        for (int i = 1; i < INITIAL_CAPACITY; i++) {
+        for (int i = 1; i < DAYS_NUMBER; i++) {
             put(i, 0);
         }
     }};
@@ -97,12 +96,9 @@ public class HealthMe {
         return valuePlan - valueFact;
     }
 
-//    private double countPercentDelta(int valuePlan, int valueFact) {
-//        return 100 * countDayLeft(valuePlan, valueFact) / valuePlan;
-//    }
 
     public Set<ReportLineDayLeft> createReportDayLeft(int day) {
-        HashSet<ReportLineDayLeft> report = new HashSet<>(3);
+        HashSet<ReportLineDayLeft> report = new HashSet<>(ACTIVITIES_NUMBER);
         report.add(new ReportLineDayLeft(LIQUID, countDayLeft(liquidPlan, liquidFact.get(day))));
         report.add(new ReportLineDayLeft(FOOD, countDayLeft(foodPlan, foodFact.get(day))));
         report.add(new ReportLineDayLeft(STEPS, countDayLeft(stepsPlan, stepsFact.get(day))));
@@ -110,14 +106,20 @@ public class HealthMe {
     }
 
 
-//    public Set<ReportLineDayDelta> createReportDayDelta() {
-//        HashSet<ReportLineDayDelta> report = new HashSet<>(3);
-//        report.add(new ReportLineDayDelta(LIQUID, countPercentDelta(liquidPlan, liquidFact)));
-//        report.add(new ReportLineDayDelta(FOOD, countPercentDelta(foodPlan, foodFact)));
-//        report.add(new ReportLineDayDelta(STEPS, countPercentDelta(stepsPlan, stepsFact)));
-//        return report;
-//    }
-//
+
+
+    public Set<ReportLineDelta> createReportDelta() {
+        HashSet<ReportLineDelta> report = new HashSet<>(ACTIVITIES_NUMBER);
+
+        report.add(new ReportLineDelta(LIQUID, liquidPlan, liquidFact));
+        report.add(new ReportLineDelta(FOOD, foodPlan, foodFact));
+        report.add(new ReportLineDelta(STEPS, stepsPlan, stepsFact));
+
+//        report.add(new ReportLineDelta(LIQUID, countPercentDelta(liquidPlan, liquidFact.get(day))));
+//        report.add(new ReportLineDelta(FOOD, countPercentDelta(foodPlan, foodFact.get(day))));
+//        report.add(new ReportLineDelta(STEPS, countPercentDelta(stepsPlan, stepsFact.get(day))));
+        return report;
+    }
 
 
 }

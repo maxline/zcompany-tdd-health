@@ -3,13 +3,18 @@ package com.zcompany.health;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import static com.zcompany.health.DayNorm.*;
 import static com.zcompany.health.EActivity.*;
+import static com.zcompany.health.HealthMe.ACTIVITIES_NUMBER;
 import static org.junit.Assert.assertEquals;
 
 public class HealthMeTest {
+
+    private static final int DAYS_NUMBER = 7;
 
     private static final int GLASS_VOLUME = 200;
     private static final int BREAKFAST_VOLUME = 500;
@@ -67,9 +72,6 @@ public class HealthMeTest {
         return 100 * (valuePlan - valueFact) / valuePlan;
     }
 
-    private void addReportLineDayDelta(HashSet<ReportLineDayDelta> report, EActivity eActivity, int valuePlan, int valueFact) {
-        report.add(new ReportLineDayDelta(eActivity, countPercentDelta(valuePlan, valueFact)));
-    }
 
     private void addReportLineDayLeft(HashSet<ReportLineDayLeft> report, EActivity eActivity, int valuePlan, int valueFact) {
         report.add(new ReportLineDayLeft(eActivity, valuePlan - valueFact));
@@ -77,7 +79,7 @@ public class HealthMeTest {
 
     @Test
     public void ReportDayLeftZeroPercentOfNormTest() {
-        HashSet<ReportLineDayLeft> report = new HashSet<>(3);
+        HashSet<ReportLineDayLeft> report = new HashSet<>(ACTIVITIES_NUMBER);
 
         addReportLineDayLeft(report, LIQUID, LIQUID_NORM, 0);
         addReportLineDayLeft(report, FOOD, FOOD_NORM, 0);
@@ -93,7 +95,7 @@ public class HealthMeTest {
         healthMe.takeActivity(TODAY, FOOD, FOOD_NORM);
         healthMe.takeActivity(TODAY, STEPS, STEPS_NORM);
 
-        HashSet<ReportLineDayLeft> report = new HashSet<>(3);
+        HashSet<ReportLineDayLeft> report = new HashSet<>(ACTIVITIES_NUMBER);
 
         addReportLineDayLeft(report, LIQUID, LIQUID_NORM, LIQUID_NORM);
         addReportLineDayLeft(report, FOOD, FOOD_NORM, FOOD_NORM);
@@ -109,7 +111,7 @@ public class HealthMeTest {
         healthMe.takeActivity(TODAY, FOOD, (int) (FOOD_NORM * 0.1));
         healthMe.takeActivity(TODAY, STEPS, (int) (STEPS_NORM * 0.1));
 
-        HashSet<ReportLineDayLeft> report = new HashSet<>(3);
+        HashSet<ReportLineDayLeft> report = new HashSet<>(ACTIVITIES_NUMBER);
 
         addReportLineDayLeft(report, LIQUID, LIQUID_NORM, (int) (LIQUID_NORM * 0.1));
         addReportLineDayLeft(report, FOOD, FOOD_NORM, (int) (FOOD_NORM * 0.1));
@@ -124,7 +126,7 @@ public class HealthMeTest {
         healthMe.takeActivity(TODAY, FOOD, FOOD_NORM * 3);
         healthMe.takeActivity(TODAY, STEPS, STEPS_NORM * 3);
 
-        HashSet<ReportLineDayLeft> report = new HashSet<>(3);
+        HashSet<ReportLineDayLeft> report = new HashSet<>(ACTIVITIES_NUMBER);
 
         addReportLineDayLeft(report, LIQUID, LIQUID_NORM, LIQUID_NORM * 3);
         addReportLineDayLeft(report, FOOD, FOOD_NORM, FOOD_NORM * 3);
@@ -133,68 +135,77 @@ public class HealthMeTest {
         assertEquals(report, healthMe.createReportDayLeft(TODAY));
     }
 
-
-    //    @Test
-//    @Ignore
-//    public void dayReportZeroPercentOfNormTest() {
-//        HashSet<ReportLineDayDelta> report = new HashSet<>(3);
-//
-//        addReportLineDayDelta(report, LIQUID, LIQUID_NORM, 0);
-//        addReportLineDayDelta(report, FOOD, FOOD_NORM, 0);
-//        addReportLineDayDelta(report, STEPS, STEPS_NORM, 0);
-//
-//        assertEquals(report, healthMe.createReportDayDelta());
-//    }
+    private void addReportLineDelta(HashSet<ReportLineDelta> report, EActivity eActivity, int valuePlan, Map<Integer, Double> activityDelta) {
+        report.add(new ReportLineDelta(eActivity, activityDelta));
+    }
 
 
-    //    @Test
+    @Test
+    public void ReportDeltaZeroPercentOfNormTest() {
+        HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
+
+        Map<Integer, Double> zeroDelta = new HashMap<Integer, Double>() {{
+            for (int day = 1; day <= DAYS_NUMBER; day++) {
+                put(day, 1.0);
+            }
+        }};
+
+        addReportLineDelta(expectedReport, LIQUID, LIQUID_NORM, zeroDelta);
+        addReportLineDelta(expectedReport, FOOD, FOOD_NORM, zeroDelta);
+        addReportLineDelta(expectedReport, STEPS, STEPS_NORM, zeroDelta);
+
+        assertEquals(expectedReport, healthMe.createReportDelta());
+    }
+
+
+//    @Test
 //    public void ReportDayDeltaHundredPercentOfNormTest() {
 //        healthMe.takeActivity(TODAY, LIQUID, LIQUID_NORM);
 //        healthMe.takeActivity(TODAY, FOOD, FOOD_NORM);
 //        healthMe.takeActivity(TODAY, STEPS, STEPS_NORM);
 //
-//        HashSet<ReportLineDayDelta> report = new HashSet<>(3);
+//        HashSet<ReportLineDelta> report = new HashSet<>(ACTIVITIES_NUMBER);
 //
-//        addReportLineDayDelta(report, LIQUID, LIQUID_NORM, LIQUID_NORM);
-//        addReportLineDayDelta(report, FOOD, FOOD_NORM, FOOD_NORM);
-//        addReportLineDayDelta(report, STEPS, STEPS_NORM, STEPS_NORM);
+//        addReportLineDelta(report, LIQUID, LIQUID_NORM, LIQUID_NORM);
+//        addReportLineDelta(report, FOOD, FOOD_NORM, FOOD_NORM);
+//        addReportLineDelta(report, STEPS, STEPS_NORM, STEPS_NORM);
 //
-//        assertEquals(report, healthMe.createReportDayDelta(TODAY));
+//        assertEquals(report, healthMe.createReportDelta(TODAY));
 //    }
 
 
-    //    @Test
-//    public void dayReportTenPercentOfNormTest() {
-//        healthMe.takeActivity(LIQUID, (int) (LIQUID_NORM * 0.1));
-//        healthMe.takeActivity(FOOD, (int) (FOOD_NORM * 0.1));
-//        healthMe.takeActivity(STEPS, (int) (STEPS_NORM * 0.1));
+//    @Test
+//    public void ReportDayDeltaTenPercentOfNormTest() {
+//        healthMe.takeActivity(TODAY, LIQUID, (int) (LIQUID_NORM * 0.1));
+//        healthMe.takeActivity(TODAY, FOOD, (int) (FOOD_NORM * 0.1));
+//        healthMe.takeActivity(TODAY, STEPS, (int) (STEPS_NORM * 0.1));
 //
-//        HashSet<ReportLineDayDelta> report = new HashSet<>(3);
+//        HashSet<ReportLineDelta> report = new HashSet<>(ACTIVITIES_NUMBER);
 //
-//        addReportLineDayDelta(report, LIQUID, LIQUID_NORM, (int) (LIQUID_NORM * 0.1));
-//        addReportLineDayDelta(report, FOOD, FOOD_NORM, (int) (FOOD_NORM * 0.1));
-//        addReportLineDayDelta(report, STEPS, STEPS_NORM, (int) (STEPS_NORM * 0.1));
+//        addReportLineDelta(report, LIQUID, LIQUID_NORM, (int) (LIQUID_NORM * 0.1));
+//        addReportLineDelta(report, FOOD, FOOD_NORM, (int) (FOOD_NORM * 0.1));
+//        addReportLineDelta(report, STEPS, STEPS_NORM, (int) (STEPS_NORM * 0.1));
 //
-//        assertEquals(report, healthMe.createReportDayDelta());
+//        assertEquals(report, healthMe.createReportDelta(TODAY));
 //    }
-
-
-    //
+//
+//
+//
 //    @Test
 //    public void dayReportThreeHundredPercentOfNormTest() {
-//        healthMe.takeActivity(LIQUID, LIQUID_NORM * 3);
-//        healthMe.takeActivity(FOOD, FOOD_NORM * 3);
-//        healthMe.takeActivity(STEPS, STEPS_NORM * 3);
+//        healthMe.takeActivity(TODAY, LIQUID, LIQUID_NORM * 3);
+//        healthMe.takeActivity(TODAY, FOOD, FOOD_NORM * 3);
+//        healthMe.takeActivity(TODAY, STEPS, STEPS_NORM * 3);
 //
-//        HashSet<ReportLineDayDelta> report = new HashSet<>(3);
+//        HashSet<ReportLineDelta> report = new HashSet<>(ACTIVITIES_NUMBER);
 //
-//        addReportLineDayDelta(report, LIQUID, LIQUID_NORM, LIQUID_NORM * 3);
-//        addReportLineDayDelta(report, FOOD, FOOD_NORM, FOOD_NORM * 3);
-//        addReportLineDayDelta(report, STEPS, STEPS_NORM, STEPS_NORM * 3);
+//        addReportLineDelta(report, LIQUID, LIQUID_NORM, LIQUID_NORM * 3);
+//        addReportLineDelta(report, FOOD, FOOD_NORM, FOOD_NORM * 3);
+//        addReportLineDelta(report, STEPS, STEPS_NORM, STEPS_NORM * 3);
 //
-//        assertEquals(report, healthMe.createReportDayDelta());
+//        assertEquals(report, healthMe.createReportDelta(TODAY));
 //    }
-//
+
 
 
 }
