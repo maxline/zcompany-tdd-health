@@ -1,0 +1,6 @@
+.metadata
+.git
+.idea
+out
+target
+*.iml
