@@ -30,11 +30,8 @@ public class ReportLineDayLeft {
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = eActivity != null ? eActivity.hashCode() : 0;
-        temp = Double.doubleToLongBits(dayLeft);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        int result = eActivity != null ? eActivity.hashCode() : 0;
+        result = 31 * result + dayLeft;
         return result;
     }
 }

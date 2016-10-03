@@ -32,38 +32,38 @@ public class ReportLineDelta {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-//    public ReportLineDelta(EActivity eActivity, double percentDelta) {
+        ReportLineDelta that = (ReportLineDelta) o;
+
+        if (eActivity != that.eActivity) return false;
+        return activityDelta != null ? activityDelta.equals(that.activityDelta) : that.activityDelta == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = eActivity != null ? eActivity.hashCode() : 0;
+        result = 31 * result + (activityDelta != null ? activityDelta.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Line{" +
+                 eActivity +
+                ", delta=" + activityDelta +
+                '}';
+    }
+
+
+    //    public ReportLineDelta(EActivity eActivity, double percentDelta) {
 //        this.eActivity = eActivity;
 //        this.percentDelta = percentDelta;
 //    }
 
-//    @Override
-//    public String toString() {
-//        return "Line{" +
-//                eActivity +
-//                ", delta=" + percentDelta +
-//                "}";
-//    }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        ReportLineDelta that = (ReportLineDelta) o;
-//
-//        if (percentDelta != that.percentDelta) return false;
-//        return eActivity == that.eActivity;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result;
-//        long temp;
-//        result = eActivity != null ? eActivity.hashCode() : 0;
-//        temp = Double.doubleToLongBits(percentDelta);
-//        result = 31 * result + (int) (temp ^ (temp >>> 32));
-//        return result;
-//    }
 }

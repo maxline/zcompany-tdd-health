@@ -144,9 +144,33 @@ public class HealthMeTest {
     public void ReportDeltaZeroPercentOfNormTest() {
         HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
 
+        Map<Integer, Double> oneHundredDelta = new HashMap<Integer, Double>() {{
+            for (int day = 1; day <= DAYS_NUMBER; day++) {
+                put(day, 100.0);
+            }
+        }};
+
+        addReportLineDelta(expectedReport, LIQUID, LIQUID_NORM, oneHundredDelta);
+        addReportLineDelta(expectedReport, FOOD, FOOD_NORM, oneHundredDelta);
+        addReportLineDelta(expectedReport, STEPS, STEPS_NORM, oneHundredDelta);
+
+        assertEquals(expectedReport, healthMe.createReportDelta());
+    }
+
+
+    @Test
+    public void ReportDeltaHundredPercentOfNormTest() {
+        for (int day = 1; day <= DAYS_NUMBER; day++) {
+            healthMe.takeActivity(day, LIQUID, LIQUID_NORM);
+            healthMe.takeActivity(day, FOOD, FOOD_NORM);
+            healthMe.takeActivity(day, STEPS, STEPS_NORM);
+        }
+
+        HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
+
         Map<Integer, Double> zeroDelta = new HashMap<Integer, Double>() {{
             for (int day = 1; day <= DAYS_NUMBER; day++) {
-                put(day, 1.0);
+                put(day, 0.0);
             }
         }};
 
@@ -156,22 +180,6 @@ public class HealthMeTest {
 
         assertEquals(expectedReport, healthMe.createReportDelta());
     }
-
-
-//    @Test
-//    public void ReportDayDeltaHundredPercentOfNormTest() {
-//        healthMe.takeActivity(TODAY, LIQUID, LIQUID_NORM);
-//        healthMe.takeActivity(TODAY, FOOD, FOOD_NORM);
-//        healthMe.takeActivity(TODAY, STEPS, STEPS_NORM);
-//
-//        HashSet<ReportLineDelta> report = new HashSet<>(ACTIVITIES_NUMBER);
-//
-//        addReportLineDelta(report, LIQUID, LIQUID_NORM, LIQUID_NORM);
-//        addReportLineDelta(report, FOOD, FOOD_NORM, FOOD_NORM);
-//        addReportLineDelta(report, STEPS, STEPS_NORM, STEPS_NORM);
-//
-//        assertEquals(report, healthMe.createReportDelta(TODAY));
-//    }
 
 
 //    @Test
@@ -205,7 +213,6 @@ public class HealthMeTest {
 //
 //        assertEquals(report, healthMe.createReportDelta(TODAY));
 //    }
-
 
 
 }

@@ -34,19 +34,19 @@ public class HealthMe {
     private int stepsPlan;
 
     private Map<Integer, Integer> liquidFact = new HashMap<Integer, Integer>() {{
-        for (int i = 1; i < DAYS_NUMBER; i++) {
+        for (int i = 1; i <= DAYS_NUMBER; i++) {
             put(i, 0);
         }
     }};
 
     private Map<Integer, Integer> foodFact = new HashMap<Integer, Integer>() {{
-        for (int i = 1; i < DAYS_NUMBER; i++) {
+        for (int i = 1; i <= DAYS_NUMBER; i++) {
             put(i, 0);
         }
     }};
 
     private Map<Integer, Integer> stepsFact = new HashMap<Integer, Integer>() {{
-        for (int i = 1; i < DAYS_NUMBER; i++) {
+        for (int i = 1; i <= DAYS_NUMBER; i++) {
             put(i, 0);
         }
     }};
