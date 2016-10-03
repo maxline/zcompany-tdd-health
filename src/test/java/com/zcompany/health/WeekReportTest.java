@@ -1,6 +1,7 @@
 package com.zcompany.health;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -95,5 +96,36 @@ public class WeekReportTest {
 
         assertEquals(expectedReport, healthMe.createReportDelta());
     }
+
+
+    private void calculateMediana(HashSet<ReportLineDelta> expectedReport) {
+
+
+    }
+
+    @Test
+    @Ignore
+    public void medianaTest() {
+        HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
+
+        Map<Integer, Double> delta = new HashMap<Integer, Double>() {{
+            for (int day = 1; day <= DAYS_IN_WEEK; day++) {
+                put(day, 10.0 * day);
+            }
+        }};
+
+        addReportLineDelta(expectedReport, LIQUID, LIQUID_NORM, delta);
+        addReportLineDelta(expectedReport, FOOD, FOOD_NORM, delta);
+        addReportLineDelta(expectedReport, STEPS, STEPS_NORM, delta);
+
+
+        calculateMediana(expectedReport);
+
+        assertEquals(expectedReport, healthMe.createReportDelta());
+
+    }
+
+
+
 
 }

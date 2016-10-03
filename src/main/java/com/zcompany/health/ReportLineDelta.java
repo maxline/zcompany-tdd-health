@@ -2,27 +2,41 @@ package com.zcompany.health;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 public class ReportLineDelta {
     private static final int DAYS_NUMBER = 7;
 
     private EActivity eActivity;
-    //private double percentDelta;
+    //private double median;
+    private Map<Integer, Double> activityDelta;
 
-    private Map<Integer, Double> activityDelta = new HashMap<Integer, Double>() {{
-        for (int day = 1; day <= DAYS_NUMBER; day++) {
-            put(day, 0.0);
-        }
-    }};
+    {
+        activityDelta = new HashMap<Integer, Double>(DAYS_NUMBER) {{
+            for (int day = 1; day <= DAYS_NUMBER; day++) {
+                put(day, 0.0);
+            }
+        }};
+    }
 
     private double countPercentDelta(int valuePlan, int valueFact) {
         return 100 * (valuePlan - valueFact) / valuePlan;
     }
 
-
     public ReportLineDelta(EActivity eActivity, Map<Integer, Double> activityDelta) {
         this.eActivity = eActivity;
         this.activityDelta = activityDelta;
+
+        calculateMedian();
+    }
+
+    private double calculateMedian() {
+        NavigableMap<Integer, Double> sortedDelta = new TreeMap<>(activityDelta);
+
+        return sortedDelta.get((1 + DAYS_NUMBER)/2 );
+        // todo дописать медиану для четных элементов
+        // todo дописать тест по расчету медианы
     }
 
     public ReportLineDelta(EActivity eActivity, int activityPlan, Map<Integer, Integer> activityFact) {
@@ -56,14 +70,7 @@ public class ReportLineDelta {
         return "Line{" +
                 eActivity +
                 ", delta=" + activityDelta +
+                ", median=" + calculateMedian() +
                 '}';
     }
-
-
-    //    public ReportLineDelta(EActivity eActivity, double percentDelta) {
-//        this.eActivity = eActivity;
-//        this.percentDelta = percentDelta;
-//    }
-
-
 }

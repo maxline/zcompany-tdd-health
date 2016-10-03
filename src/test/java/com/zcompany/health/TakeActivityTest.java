@@ -7,7 +7,7 @@ import static com.zcompany.health.DayNorm.*;
 import static com.zcompany.health.EActivity.*;
 import static org.junit.Assert.assertEquals;
 
-public class TakeTest {
+public class TakeActivityTest {
 
     private static final int GLASS_VOLUME = 200;
     private static final int BREAKFAST_VOLUME = 500;
