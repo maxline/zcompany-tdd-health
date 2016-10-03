@@ -106,8 +106,6 @@ public class HealthMe {
     }
 
 
-
-
     public Set<ReportLineDelta> createReportDelta() {
         HashSet<ReportLineDelta> report = new HashSet<>(ACTIVITIES_NUMBER);
 

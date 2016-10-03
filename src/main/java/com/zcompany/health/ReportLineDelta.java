@@ -54,7 +54,7 @@ public class ReportLineDelta {
     @Override
     public String toString() {
         return "Line{" +
-                 eActivity +
+                eActivity +
                 ", delta=" + activityDelta +
                 '}';
     }
