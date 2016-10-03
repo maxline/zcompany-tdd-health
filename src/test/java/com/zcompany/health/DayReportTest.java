@@ -29,7 +29,7 @@ public class DayReportTest {
     }
 
     @Test
-    public void DayReportLeftZeroPercentOfNormTest() {
+    public void dayReportLeftZeroPercentOfNormTest() {
         HashSet<ReportLineDayLeft> report = new HashSet<>(ACTIVITIES_NUMBER);
 
         addReportLineDayLeft(report, LIQUID, LIQUID_NORM, 0);
@@ -40,7 +40,7 @@ public class DayReportTest {
     }
 
     @Test
-    public void DayReportLeftHundredPercentTest() {
+    public void dayReportLeftHundredPercentTest() {
         healthMe.takeActivity(TODAY, LIQUID, LIQUID_NORM);
         healthMe.takeActivity(TODAY, FOOD, FOOD_NORM);
         healthMe.takeActivity(TODAY, STEPS, STEPS_NORM);
@@ -55,7 +55,7 @@ public class DayReportTest {
     }
 
     @Test
-    public void DayReportLeftTenPercentTest() {
+    public void dayReportLeftTenPercentTest() {
         healthMe.takeActivity(TODAY, LIQUID, (int) (LIQUID_NORM * 0.1));
         healthMe.takeActivity(TODAY, FOOD, (int) (FOOD_NORM * 0.1));
         healthMe.takeActivity(TODAY, STEPS, (int) (STEPS_NORM * 0.1));
@@ -70,7 +70,7 @@ public class DayReportTest {
     }
 
     @Test
-    public void DayReportLeftThreeHundredPercentTest() {
+    public void dayReportLeftThreeHundredPercentTest() {
         healthMe.takeActivity(TODAY, LIQUID, LIQUID_NORM * 3);
         healthMe.takeActivity(TODAY, FOOD, FOOD_NORM * 3);
         healthMe.takeActivity(TODAY, STEPS, STEPS_NORM * 3);

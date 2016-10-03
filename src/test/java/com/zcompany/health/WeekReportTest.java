@@ -33,7 +33,7 @@ public class WeekReportTest {
     }
 
     @Test
-    public void WeekReportDeltaZeroPercentTest() {
+    public void weekReportDeltaZeroPercentTest() {
         HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
 
         Map<Integer, Double> oneHundredDelta = new HashMap<Integer, Double>() {{
@@ -51,7 +51,7 @@ public class WeekReportTest {
 
 
     @Test
-    public void WeekReportDeltaHundredPercentTest() {
+    public void weekReportDeltaHundredPercentTest() {
         HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
 
         Map<Integer, Double> zeroDelta = new HashMap<Integer, Double>() {{
@@ -74,7 +74,7 @@ public class WeekReportTest {
     }
 
     @Test
-    public void WeekReportDeltaTenPercentTest() {
+    public void weekReportDeltaTenPercentTest() {
         HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
 
         Map<Integer, Double> tenPercentDelta = new HashMap<Integer, Double>() {{
@@ -95,6 +95,5 @@ public class WeekReportTest {
 
         assertEquals(expectedReport, healthMe.createReportDelta());
     }
-
 
 }
