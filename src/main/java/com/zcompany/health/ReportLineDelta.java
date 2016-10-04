@@ -1,9 +1,6 @@
 package com.zcompany.health;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class ReportLineDelta {
     private static final int DAYS_NUMBER = 7;
@@ -27,16 +24,18 @@ public class ReportLineDelta {
     public ReportLineDelta(EActivity eActivity, Map<Integer, Double> activityDelta) {
         this.eActivity = eActivity;
         this.activityDelta = activityDelta;
-
-        calculateMedian();
     }
 
-    private double calculateMedian() {
-        NavigableMap<Integer, Double> sortedDelta = new TreeMap<>(activityDelta);
+    public double calculateMedian() {
+        List<Double> listDelta = new ArrayList<Double>(activityDelta.values());
 
-        return sortedDelta.get((1 + DAYS_NUMBER)/2 );
-        // todo дописать медиану для четных элементов
-        // todo дописать тест по расчету медианы
+        Collections.sort(listDelta);
+
+        if (DAYS_NUMBER % 2 == 0) {
+            return (listDelta.get(DAYS_NUMBER / 2 - 1) + listDelta.get(DAYS_NUMBER / 2)) / 2;
+        } else {
+            return listDelta.get((DAYS_NUMBER) / 2);
+        }
     }
 
     public ReportLineDelta(EActivity eActivity, int activityPlan, Map<Integer, Integer> activityFact) {

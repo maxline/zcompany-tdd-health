@@ -1,7 +1,6 @@
 package com.zcompany.health;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -97,15 +96,12 @@ public class WeekReportTest {
         assertEquals(expectedReport, healthMe.createReportDelta());
     }
 
-
     private void calculateMediana(HashSet<ReportLineDelta> expectedReport) {
-
 
     }
 
     @Test
-    @Ignore
-    public void medianaTest() {
+    public void medianTest() {
         HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
 
         Map<Integer, Double> delta = new HashMap<Integer, Double>() {{
@@ -114,18 +110,21 @@ public class WeekReportTest {
             }
         }};
 
+        //todo сделать чтобы медиана считалась по трем параметрам и записывалась в HashSet,
+        // после чего ассертим ее
+
         addReportLineDelta(expectedReport, LIQUID, LIQUID_NORM, delta);
         addReportLineDelta(expectedReport, FOOD, FOOD_NORM, delta);
         addReportLineDelta(expectedReport, STEPS, STEPS_NORM, delta);
-
-
         calculateMediana(expectedReport);
 
-        assertEquals(expectedReport, healthMe.createReportDelta());
+        for (int day = 1; day <= DAYS_IN_WEEK; day++) {
+            healthMe.takeActivity(day, LIQUID, (int) (LIQUID_NORM * 0.1 * day));
+            healthMe.takeActivity(day, FOOD, (int) (FOOD_NORM * 0.1 * day));
+            healthMe.takeActivity(day, STEPS, (int) (STEPS_NORM * 0.1 * day));
+        }
 
+        assertEquals(60.0, healthMe.calculateMedian(), 0.00001);
     }
-
-
-
 
 }

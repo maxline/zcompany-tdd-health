@@ -120,4 +120,9 @@ public class HealthMe {
     }
 
 
+    public double calculateMedian() {
+
+        ReportLineDelta reportLineDelta = new ReportLineDelta(LIQUID, liquidPlan, liquidFact);
+        return  reportLineDelta.calculateMedian();
+    }
 }
