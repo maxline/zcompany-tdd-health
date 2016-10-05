@@ -6,7 +6,6 @@ public class ReportLineDelta {
     private static final int DAYS_NUMBER = 7;
 
     private EActivity eActivity;
-    //private double median;
     private Map<Integer, Double> activityDelta;
 
     {
@@ -27,7 +26,7 @@ public class ReportLineDelta {
     }
 
     public double calculateMedian() {
-        List<Double> listDelta = new ArrayList<Double>(activityDelta.values());
+        List<Double> listDelta = new ArrayList<>(activityDelta.values());
 
         Collections.sort(listDelta);
 

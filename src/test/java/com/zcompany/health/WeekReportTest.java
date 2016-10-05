@@ -3,9 +3,7 @@ package com.zcompany.health;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static com.zcompany.health.DayNorm.*;
 import static com.zcompany.health.EActivity.*;
@@ -21,12 +19,6 @@ public class WeekReportTest {
     public void setup() {
         healthMe = new HealthMe(LIQUID_NORM, FOOD_NORM, STEPS_NORM);
     }
-
-
-//    private double countPercentDelta(int valuePlan, int valueFact) {
-//        return 100 * (valuePlan - valueFact) / valuePlan;
-//    }
-
 
     private void addReportLineDelta(HashSet<ReportLineDelta> report, EActivity eActivity, int valuePlan, Map<Integer, Double> activityDelta) {
         report.add(new ReportLineDelta(eActivity, activityDelta));
@@ -48,7 +40,6 @@ public class WeekReportTest {
 
         assertEquals(expectedReport, healthMe.createReportDelta());
     }
-
 
     @Test
     public void weekReportDeltaHundredPercentTest() {
@@ -96,27 +87,47 @@ public class WeekReportTest {
         assertEquals(expectedReport, healthMe.createReportDelta());
     }
 
-    private void calculateMediana(HashSet<ReportLineDelta> expectedReport) {
+    /**
+     * fact 0% 0% 0% _0%_ 0% 0% 0%
+     * delta 100% 100% 100% _100%_ 100% 100% 100%
+     * sorted 100% 100% 100% _100%_ 100% 100% 100%
+     * median = 100%
+     */
+    @Test
+    public void medianZeroPercentTest() {
+        List<Double> expectedMedian = Arrays.asList(100.0, 100.0, 100.0);
 
+        assertEquals(expectedMedian, healthMe.createReportMedian());
     }
 
+    /**
+     * fact 100% 100% 100% _100%_ 100% 100% 100%
+     * delta 0% 0% 0% _0%_ 0% 0% 0%
+     * sorted 0% 0% 0% _0%_ 0% 0% 0%
+     * median = 0%
+     */
     @Test
-    public void medianTest() {
-        HashSet<ReportLineDelta> expectedReport = new HashSet<>(ACTIVITIES_NUMBER);
+    public void medianHundredPercentTest() {
+        List<Double> expectedMedian = Arrays.asList(0.0, 0.0, 0.0);
 
-        Map<Integer, Double> delta = new HashMap<Integer, Double>() {{
-            for (int day = 1; day <= DAYS_IN_WEEK; day++) {
-                put(day, 10.0 * day);
-            }
-        }};
+        for (int day = 1; day <= DAYS_IN_WEEK; day++) {
+            healthMe.takeActivity(day, LIQUID, LIQUID_NORM);
+            healthMe.takeActivity(day, FOOD, FOOD_NORM);
+            healthMe.takeActivity(day, STEPS, STEPS_NORM);
+        }
 
-        //todo сделать чтобы медиана считалась по трем параметрам и записывалась в HashSet,
-        // после чего ассертим ее
+        assertEquals(expectedMedian, healthMe.createReportMedian());
+    }
 
-        addReportLineDelta(expectedReport, LIQUID, LIQUID_NORM, delta);
-        addReportLineDelta(expectedReport, FOOD, FOOD_NORM, delta);
-        addReportLineDelta(expectedReport, STEPS, STEPS_NORM, delta);
-        calculateMediana(expectedReport);
+    /**
+     * fact 10% 20% 30% _40%_ 50% 60% 70%
+     * delta 90% 80% 70% _60%_ 50% 40% 30%
+     * sorted 30% 40% 50% _60%_ 70% 80% 90%
+     * median = 60%
+     */
+    @Test
+    public void medianSixtyPercentTest() {
+        List<Double> expectedMedian = Arrays.asList(60.0, 60.0, 60.0);
 
         for (int day = 1; day <= DAYS_IN_WEEK; day++) {
             healthMe.takeActivity(day, LIQUID, (int) (LIQUID_NORM * 0.1 * day));
@@ -124,7 +135,37 @@ public class WeekReportTest {
             healthMe.takeActivity(day, STEPS, (int) (STEPS_NORM * 0.1 * day));
         }
 
-        assertEquals(60.0, healthMe.calculateMedian(), 0.00001);
+        assertEquals(expectedMedian, healthMe.createReportMedian());
     }
 
+    /**
+     * fact 70% 10% 10% _10%_ 90% 90% 90%
+     * delta 30% 90% 90% _90%_ 10% 10% 10%
+     * sorted 10% 10% 10% _30%_ 90% 90% 90%
+     * median = 30%
+     */
+    @Test
+    public void medianThirtyPercentTest() {
+        List<Double> expectedMedian = Arrays.asList(30.0, 30.0, 30.0);
+
+        for (int day = 1; day <= 1; day++) {
+            healthMe.takeActivity(day, LIQUID, (int) (LIQUID_NORM * 0.7));
+            healthMe.takeActivity(day, FOOD, (int) (FOOD_NORM * 0.7));
+            healthMe.takeActivity(day, STEPS, (int) (STEPS_NORM * 0.7));
+        }
+
+        for (int day = 2; day <= 4; day++) {
+            healthMe.takeActivity(day, LIQUID, (int) (LIQUID_NORM * 0.9));
+            healthMe.takeActivity(day, FOOD, (int) (FOOD_NORM * 0.9));
+            healthMe.takeActivity(day, STEPS, (int) (STEPS_NORM * 0.9));
+        }
+
+        for (int day = 5; day <= DAYS_IN_WEEK; day++) {
+            healthMe.takeActivity(day, LIQUID, (int) (LIQUID_NORM * 0.1));
+            healthMe.takeActivity(day, FOOD, (int) (FOOD_NORM * 0.1));
+            healthMe.takeActivity(day, STEPS, (int) (STEPS_NORM * 0.1));
+        }
+
+        assertEquals(expectedMedian, healthMe.createReportMedian());
+    }
 }

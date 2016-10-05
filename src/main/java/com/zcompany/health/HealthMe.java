@@ -1,9 +1,6 @@
 package com.zcompany.health;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.zcompany.health.EActivity.*;
 
@@ -91,7 +88,6 @@ public class HealthMe {
         }
     }
 
-
     private int countDayLeft(int valuePlan, int valueFact) {
         return valuePlan - valueFact;
     }
@@ -105,7 +101,6 @@ public class HealthMe {
         return report;
     }
 
-
     public Set<ReportLineDelta> createReportDelta() {
         HashSet<ReportLineDelta> report = new HashSet<>(ACTIVITIES_NUMBER);
 
@@ -113,16 +108,15 @@ public class HealthMe {
         report.add(new ReportLineDelta(FOOD, foodPlan, foodFact));
         report.add(new ReportLineDelta(STEPS, stepsPlan, stepsFact));
 
-//        report.add(new ReportLineDelta(LIQUID, countPercentDelta(liquidPlan, liquidFact.get(day))));
-//        report.add(new ReportLineDelta(FOOD, countPercentDelta(foodPlan, foodFact.get(day))));
-//        report.add(new ReportLineDelta(STEPS, countPercentDelta(stepsPlan, stepsFact.get(day))));
         return report;
     }
 
+    public ArrayList<Double> createReportMedian() {
+        ArrayList<Double> median = new ArrayList<>(ACTIVITIES_NUMBER);
+        median.add(new ReportLineDelta(LIQUID, liquidPlan, liquidFact).calculateMedian());
+        median.add(new ReportLineDelta(FOOD, foodPlan, foodFact).calculateMedian());
+        median.add(new ReportLineDelta(STEPS, stepsPlan, stepsFact).calculateMedian());
 
-    public double calculateMedian() {
-
-        ReportLineDelta reportLineDelta = new ReportLineDelta(LIQUID, liquidPlan, liquidFact);
-        return  reportLineDelta.calculateMedian();
+        return median;
     }
 }

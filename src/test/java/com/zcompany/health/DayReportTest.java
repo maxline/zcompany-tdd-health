@@ -20,10 +20,6 @@ public class DayReportTest {
         healthMe = new HealthMe(LIQUID_NORM, FOOD_NORM, STEPS_NORM);
     }
 
-//    private double countPercentDelta(int valuePlan, int valueFact) {
-//        return 100 * (valuePlan - valueFact) / valuePlan;
-//    }
-
     private void addReportLineDayLeft(HashSet<ReportLineDayLeft> report, EActivity eActivity, int valuePlan, int valueFact) {
         report.add(new ReportLineDayLeft(eActivity, valuePlan - valueFact));
     }
@@ -83,5 +79,4 @@ public class DayReportTest {
 
         assertEquals(report, healthMe.createReportDayLeft(TODAY));
     }
-
 }
